@@ -1,0 +1,22 @@
+
+.list{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+  input{
+    margin-right: 10px;
+  }
+  .link{
+    margin-right: 10px;
+  }
+}
+.title {
+    font-size: 16px;
+    color: #333; 
+  
+    &.completed {
+      text-decoration: line-through; 
+      color: #999; 
+    }
+  }
