@@ -5,10 +5,13 @@
 ## Установка
 
 1. Клонируйте репозиторий:
-  git clone https://github.com/Mageln/toooodo.git
+git clone https://github.com/Mageln/toooodo.git
+
 2.Перейдите в директорию проекта:
 cd todo-list
+
 3.Установите зависимости:
 npm install или npm i
+
 4.Запустить проект
 npm run dev
