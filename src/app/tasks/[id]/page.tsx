@@ -1,17 +1,19 @@
 'use client'
 
 import { type RootState } from '@/redux/store'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useRouter } from 'next/navigation'
 import { setTodoTitle, toggleTodo } from '@/redux/todoSlice'
 import Button from '@/components/Button/Button'
 import FormItem from '@/components/FormItem/FormItem'
 import css from './index.module.scss'
+import { useTitle } from '@/context/TitleContext'
 
 const TaskDetailPage: React.FC = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const { setTitle } = useTitle()
 
   const { id } = useParams()
 
@@ -20,6 +22,10 @@ const TaskDetailPage: React.FC = () => {
 
   const [isEdit, setIsEdit] = useState(false)
   const [newTitle, setNewTitle] = useState(todo?.title ?? '')
+
+  useEffect(() => {
+    setTitle('Детали задачи')
+  }, [setTitle])
 
   if (todo == null) {
     return <div>Задача не найдена</div>
@@ -41,8 +47,6 @@ const TaskDetailPage: React.FC = () => {
   }
   return (
     <FormItem>
-      <h2>Детали задачи</h2>
-
       <p className={css.title}>
         Заголовок:
         {isEdit
