@@ -7,7 +7,13 @@ interface TodoState {
 }
 
 const initialState: TodoState = {
-  todos: []
+  todos: [
+    {
+      id: 1,
+      title: 'Добавьте задачу',
+      completed: false
+    }
+  ]
 }
 
 const todoSlice = createSlice({

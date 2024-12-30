@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from 'react'
 
 const TitleContext = createContext<{ title: string, setTitle: (title: string) => void } | undefined>(undefined)
 
-export const TitleProvider: React.FC<TitleProviderProps> = ({ children }) => {
+export const TitleProvider: React.FC<TitleProviderProps> = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const [title, setTitle] = useState('Список задач')
   return (
     <TitleContext.Provider value={{ title, setTitle }}>
@@ -17,7 +17,7 @@ export const TitleProvider: React.FC<TitleProviderProps> = ({ children }) => {
 export const useTitle = (): TitleContextType => {
   const context = useContext(TitleContext)
   if (context == null) {
-    throw new Error('useTitle must be used within a TitleProvider');
+    throw new Error('useTitle must be used within a TitleProvider')
   }
   return context
 }
