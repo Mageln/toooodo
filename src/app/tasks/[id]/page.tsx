@@ -47,6 +47,7 @@ const TaskDetailPage: React.FC = () => {
   }
   return (
     <FormItem>
+      <div className={css.pageContainer}>
       <p className={css.title}>
         Заголовок:
         {isEdit
@@ -81,6 +82,7 @@ const TaskDetailPage: React.FC = () => {
         {todo.completed ? ' Выполнено' : 'Не выполнено'}
       </Button>
       <Button onClick={() => { router.push('/') }}>Вернуться</Button>
+      </div>
     </FormItem>
   )
 }

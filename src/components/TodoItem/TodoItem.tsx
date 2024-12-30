@@ -21,6 +21,7 @@ const TodoItem: React.FC<{ todo: ITodo }> = ({ todo }) => {
   }
 
   return (
+    <div className={cn(css['todo-card'], { [css.completed]: todo.completed })}>
     <li className={css.list}>
       <input type="checkbox" checked={todo.completed} onChange={handleToggle} />
       <Link className={css.link} href={`/tasks/${todo.id}`}>
@@ -33,6 +34,7 @@ const TodoItem: React.FC<{ todo: ITodo }> = ({ todo }) => {
         Удалить
       </Button>
     </li>
+    </div>
   )
 }
 

@@ -15,7 +15,7 @@ const Button = ({
 }): React.JSX.Element => {
   return (
     <button
-      className={cn(css.button, css[color], { [css.disabled]: loading })}
+    className={cn(css.button, css[color], { [css.disabled]: loading })}
       disabled={loading}
       onClick={onClick}
     >

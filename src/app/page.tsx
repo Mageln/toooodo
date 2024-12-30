@@ -2,21 +2,21 @@
 
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import axios, { type AxiosResponse } from 'axios'
 import { setTodos } from '@/redux/todoSlice'
 import TodoList from '../components/TodoList/TodoList'
-import Link from 'next/link'
-import Button from '@/components/Button/Button'
 import FormItem from '@/components/FormItem/FormItem'
-import { type ITodo } from '@/types/todo'
 import { type RootState } from '@/redux/store'
 import { useTitle } from '@/context/TitleContext'
+import { fetchTodos } from '@/utils/api'
+import { Loader } from 'lucide-react'
+import css from './page.module.scss'
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch()
   const todos = useSelector((state: RootState) => state.todos.todos)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   const { setTitle } = useTitle()
 
@@ -25,41 +25,38 @@ const HomePage: React.FC = () => {
   }, [setTitle])
 
   useEffect(() => {
-    const fetchTodos = async (): Promise<void> => {
+    const fetchTodosData = async (): Promise<void> => {
       try {
         setLoading(true)
-        const response: AxiosResponse<ITodo[]> = await axios.get(
-          'https://jsonplaceholder.typicode.com/todos'
-        )
-        dispatch(setTodos(response.data))
+        const todosFromApi = await fetchTodos()
+        dispatch(setTodos(todosFromApi))
+        localStorage.setItem('todos', JSON.stringify(todosFromApi))
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Произошла ошибка')
+        const todosFromLocalStorage = localStorage.getItem('todos')
+        if (todosFromLocalStorage != null) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          dispatch(setTodos(JSON.parse(todosFromLocalStorage)))
+        }
       } finally {
         setLoading(false)
       }
     }
 
-    const timeoutId = setTimeout(() => {
-      if (loading) {
-        setError('Загрузка занимает слишком много времени. Показ локальных задач.')
-      }
-    }, 2000)
-
     if (todos.length === 0) {
-      fetchTodos().catch(console.error)
+      fetchTodosData().catch(console.error)
     }
-
-    return () => { clearTimeout(timeoutId) }
-  }, [dispatch, todos.length, loading])
-
-  if (loading) return <p>Загрузка...</p>
-  if (error != null) return <p>Ошибка: {error}</p>
+  }, [dispatch, todos.length])
 
   return (
     <FormItem>
-      <Link href="/add-task">
-        <Button>Добавить новую задачу</Button>
-      </Link>
+
+      {loading && (
+        <div className={css.spinnerContainer}>
+          <Loader className={css.animateSpin} size={40} />
+        </div>
+      )}
+      {(error != null) && <p>Ошибка: {error}</p>}
       <TodoList />
     </FormItem>
   )

@@ -1,10 +1,40 @@
-.header{
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid black;
-    h3{
-        padding-left: 350px;
 
-    }
-}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+
+  .link {
+    text-decoration: none;
+  }
+  
+
+  .mainTitle {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+
+  .mainTitle:hover {
+    color: #ff6f61; 
+  }
+  
+
+  .subTitle {
+    font-size: 18px;
+    color: #7a7a7a;
+    font-weight: normal;
+    text-align: center; 
+    width: 100%; 
+    margin-top: 8px; 
+    padding-right: 95px;
+  }
