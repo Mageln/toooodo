@@ -15,3 +15,6 @@ npm install или npm i
 
 4.Запустить проект
 npm run dev
+
+##Deploy
+https://toooodo-4sfa.vercel.app/tasks/1
