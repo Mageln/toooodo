@@ -7,7 +7,7 @@ import FormItem from '@/components/FormItem/FormItem'
 
 import { useTitle } from '@/context/TitleContext'
 import { fetchTodos } from '@/utils/api'
-import { Loader, Loader2, Plus } from 'lucide-react'
+import { Loader, Loader2 } from 'lucide-react'
 import css from './page.module.scss'
 import { type ITodo } from '@/types/todo'
 import Link from 'next/link'
@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
       {(error != null) && <p>Ошибка: {error}</p>}
       <TodoList />
         <Link className={css.addTask} href="/add-task">
-              <Button><Plus/></Button>
+              <Button>Добавить задачу</Button>
             </Link>
     </FormItem>
   )
