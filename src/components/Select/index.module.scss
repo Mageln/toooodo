@@ -1,0 +1,10 @@
+.selectContainer{
+   display: inline-block;
+    &>select{
+        text-align: center;
+        height: 30px;
+        border-radius: 50px;
+        width: auto;
+        min-width: 100px;
+    }
+}

@@ -36,5 +36,15 @@
     text-align: center; 
     width: 100%; 
     margin-top: 8px; 
-    padding-right: 95px;
   }
+
+.addTask{
+  display: none;
+}
+
+@media (max-width:768px){
+  .addTask{
+    display: block;
+  }
+
+}

@@ -4,6 +4,7 @@ import React from 'react'
 import css from './index.module.scss'
 import { useTitle } from '@/context/TitleContext'
 import Button from '../Button/Button'
+import { Plus } from 'lucide-react'
 
 const Header: React.FC = (): React.JSX.Element => {
   const { title } = useTitle()
@@ -14,9 +15,9 @@ const Header: React.FC = (): React.JSX.Element => {
         <h1 className={css.mainTitle}>TODOлист</h1>
       </Link>
       <h3 className={css.subTitle}>{title}</h3>
-      <Link href="/add-task">
-        <Button>Добавить новую задачу</Button>
-      </Link>
+      <Link className={css.addTask} href="/add-task">
+              <Button><Plus/></Button>
+            </Link>
     </div>
   )
 }

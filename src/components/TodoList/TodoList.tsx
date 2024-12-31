@@ -1,48 +1,66 @@
 'use client'
 import { type ITodo } from '@/types/todo'
 import { type RootState } from '../../redux/store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import TodoItem from '../TodoItem/TodoItem'
 import css from './index.module.scss'
-import Button from '../Button/Button'
-import { useState } from 'react'
-import { filterTodos, setTodos } from '@/redux/todoSlice'
-import { fetchTodos } from '@/utils/api'
+import { useEffect, useState } from 'react'
+import { Search } from '../Search/Search'
+import Select from '../Select/Select'
 
 const TodoList: React.FC = () => {
-  const dispatch = useDispatch()
   const todos = useSelector((state: RootState) => state.todos.todos)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filter, setFilter] = useState<'all' | 'completed' | 'incomplete'>('all')
+  const [filteredTodos, setFilteredTodos] = useState<ITodo[]>(todos)
+
+  useEffect(() => {
+    let filtered = [...todos]
+    if (filter === 'completed') {
+      filtered = filtered.filter((todo) => todo.completed)
+    } else if (filter === 'incomplete') {
+      filtered = filtered.filter((todo) => !todo.completed)
+    }
+    setFilteredTodos(filtered)
+  }, [filter, todos])
 
   const handleFilterChange = (filterType: 'all' | 'completed' | 'incomplete'): void => {
     setFilter(filterType)
-    if (filterType === 'completed') {
-      dispatch(filterTodos(true))
-    } else if (filterType === 'incomplete') {
-      dispatch(filterTodos(false))
-    } else {
-      fetchTodos().then((todos) => dispatch(setTodos(todos))).catch(console.error)
-    }
   }
 
   if (todos.length === 0) {
     return <p>задачи отсутствуют</p>
   }
 
+  const handleSearch = (query: string): void => {
+    if (query === '') {
+      setFilteredTodos(todos)
+    } else {
+      setFilteredTodos(
+        todos.filter((todo) =>
+          todo.todo.toLowerCase().includes(query.toLowerCase())
+        )
+      )
+    }
+  }
+
   return (
     <div className={css.container}>
-        <div className={css.filterButtons}>
-        <Button onClick={() => { handleFilterChange('all') }}>Все</Button>
-        <Button color="primary" onClick={() => { handleFilterChange('completed') }}>Выполненные</Button>
-        <Button color="danger" onClick={() => { handleFilterChange('incomplete') }}>Невыполненные</Button>
+        <div className={css.searchHead}>
+      <Search onSearch={handleSearch}/>
+        <Select filter={filter} onChange={handleFilterChange}/>
       </div>
-    {todos.map((todo: ITodo) => (
-      <div key={todo.id}>
-        <TodoItem key={todo.id} todo={todo} />
-
-      </div>
-    ))}
+      {filteredTodos.length === 0
+        ? (
+        <p>Задачи отсутствуют</p>
+          )
+        : (
+            filteredTodos.map((todo: ITodo) => (
+          <div key={todo.id}>
+            <TodoItem todo={todo} />
+          </div>
+            ))
+          )}
   </div>
   )
 }

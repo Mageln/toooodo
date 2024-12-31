@@ -1,0 +1,19 @@
+.searchContainer{
+   display: flex;
+   align-items: center;
+   width: 82%;
+   
+   &>input{
+    position: relative;
+    width: 70%;
+    height: 38px;
+    border-radius:5px;
+    border: 1px solid #b1b0b0 ;
+    padding-left: 3px;
+   }
+   &>svg{
+    position: relative;
+    right: 20px;
+    color: #b1b0b0;
+   }
+}

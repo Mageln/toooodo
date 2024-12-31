@@ -1,22 +1,23 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setTodos } from '@/redux/todoSlice'
 import TodoList from '../components/TodoList/TodoList'
 import FormItem from '@/components/FormItem/FormItem'
-import { type RootState } from '@/redux/store'
+
 import { useTitle } from '@/context/TitleContext'
 import { fetchTodos } from '@/utils/api'
-import { Loader } from 'lucide-react'
+import { Loader, Loader2, Plus } from 'lucide-react'
 import css from './page.module.scss'
+import { type ITodo } from '@/types/todo'
+import Link from 'next/link'
+import Button from '@/components/Button/Button'
 
 const HomePage: React.FC = () => {
   const dispatch = useDispatch()
-  const todos = useSelector((state: RootState) => state.todos.todos)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isClient, setIsClient] = useState(false)
 
   const { setTitle } = useTitle()
 
@@ -25,32 +26,42 @@ const HomePage: React.FC = () => {
   }, [setTitle])
 
   useEffect(() => {
-    const fetchTodosData = async (): Promise<void> => {
-      try {
-        setLoading(true)
-        const todosFromApi = await fetchTodos()
-        dispatch(setTodos(todosFromApi))
-        localStorage.setItem('todos', JSON.stringify(todosFromApi))
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Произошла ошибка')
-        const todosFromLocalStorage = localStorage.getItem('todos')
-        if (todosFromLocalStorage != null) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          dispatch(setTodos(JSON.parse(todosFromLocalStorage)))
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (isClient) {
+      const todosFromLocalStorage = localStorage.getItem('todos')
+      if (todosFromLocalStorage != null) {
+        const todos: ITodo[] = JSON.parse(todosFromLocalStorage)
+        dispatch(setTodos(todos))
+      } else {
+        const fetchTodosData = async (): Promise<void> => {
+          try {
+            setLoading(true)
+            const todosFromApi = await fetchTodos()
+            dispatch(setTodos(todosFromApi))
+            localStorage.setItem('todos', JSON.stringify(todosFromApi))
+          } catch (err) {
+            setError(err instanceof Error ? err.message : 'Произошла ошибка')
+          } finally {
+            setLoading(false)
+          }
         }
-      } finally {
-        setLoading(false)
+
+        fetchTodosData().catch(console.error)
       }
     }
+  }, [dispatch, isClient])
 
-    if (todos.length === 0) {
-      fetchTodosData().catch(console.error)
-    }
-  }, [dispatch, todos.length])
+  if (!isClient) {
+    return <div className={css.spinnerContainer}>
+      <Loader2 className={css.animateSpin} size={30}/>
+      </div>
+  }
 
   return (
     <FormItem>
-
       {loading && (
         <div className={css.spinnerContainer}>
           <Loader className={css.animateSpin} size={40} />
@@ -58,6 +69,9 @@ const HomePage: React.FC = () => {
       )}
       {(error != null) && <p>Ошибка: {error}</p>}
       <TodoList />
+        <Link className={css.addTask} href="/add-task">
+              <Button><Plus/></Button>
+            </Link>
     </FormItem>
   )
 }

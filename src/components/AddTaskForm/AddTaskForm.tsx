@@ -5,6 +5,7 @@ import { addTodo } from '../../redux/todoSlice'
 import { type ITodo } from '../../types/todo'
 import { useRouter } from 'next/navigation'
 import Button from '../Button/Button'
+import css from './index.module.scss'
 
 const AddTaskForm: React.FC = () => {
   const [title, setTitle] = useState('')
@@ -13,10 +14,14 @@ const AddTaskForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
+
+    const randomUserId = Math.floor(Math.random() * 10000) + 1
+
     const newTodo: ITodo = {
       id: Date.now(),
-      title,
-      completed: false
+      todo: title,
+      completed: false,
+      userId: randomUserId
     }
     dispatch(addTodo(newTodo))
     setTitle('')
@@ -24,8 +29,11 @@ const AddTaskForm: React.FC = () => {
       router.push('/')
     }, 100)
   }
+  const handleBack = (): void => {
+    router.back()
+  }
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={css.from} onSubmit={handleSubmit}>
       <input
         type="text"
         value={title}
@@ -33,8 +41,10 @@ const AddTaskForm: React.FC = () => {
         placeholder="Введите новую задачу"
         required
       />
-      <Button>Сохранить</Button>
+      <Button>Добавить</Button>
+      <Button onClick={handleBack}>Назад</Button>
     </form>
+
   )
 }
 

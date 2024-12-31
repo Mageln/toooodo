@@ -6,6 +6,17 @@
     width: 100%; 
   
   }
+  .addTask {
+    position: fixed; 
+    right: 20px; 
+    bottom: 20px;
+    z-index: 10; 
+    &>button{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+  }
   
   .animateSpin {
     animation: spin 1s linear infinite;
@@ -14,4 +25,11 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width:768px){
+    .addTask{
+      display: none;
+    }
+  
   }
