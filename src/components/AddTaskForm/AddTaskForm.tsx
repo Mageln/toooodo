@@ -21,7 +21,8 @@ const AddTaskForm: React.FC = () => {
       id: Date.now(),
       todo: title,
       completed: false,
-      userId: randomUserId
+      userId: randomUserId,
+      description: ''
     }
     dispatch(addTodo(newTodo))
     setTitle('')
